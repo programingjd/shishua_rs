@@ -223,7 +223,7 @@ fn sse2_available() -> bool {
     }
 
     #[cfg(target_arch = "x86")]
-    unsafe {
+    {
         (__cpuid(1).edx & (1 << 26)) != 0
     }
 }
@@ -235,25 +235,23 @@ fn ssse3_available() -> bool {
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 fn avx2_available() -> bool {
-    unsafe {
-        if __cpuid(0).eax < 7 {
-            return false;
-        }
-
-        let leaf1 = __cpuid(1);
-        let avx = (leaf1.ecx & (1 << 28)) != 0;
-        let osxsave = (leaf1.ecx & (1 << 27)) != 0;
-        if !avx || !osxsave {
-            return false;
-        }
-
-        let xcr0 = _xgetbv(0);
-        if (xcr0 & 0b110) != 0b110 {
-            return false;
-        }
-
-        (__cpuid_count(7, 0).ebx & (1 << 5)) != 0
+    if __cpuid(0).eax < 7 {
+        return false;
     }
+
+    let leaf1 = __cpuid(1);
+    let avx = (leaf1.ecx & (1 << 28)) != 0;
+    let osxsave = (leaf1.ecx & (1 << 27)) != 0;
+    if !avx || !osxsave {
+        return false;
+    }
+
+    let xcr0 = unsafe { _xgetbv(0) };
+    if (xcr0 & 0b110) != 0b110 {
+        return false;
+    }
+
+    (__cpuid_count(7, 0).ebx & (1 << 5)) != 0
 }
 
 pub(crate) fn bytes_to_u64s(
