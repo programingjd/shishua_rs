@@ -41,7 +41,7 @@ impl ShiShuARng {
     /// The caller must ensure that the current CPU supports SSE2 before using
     /// the returned RNG. Prefer [`ShiShuARng::new`] for runtime dispatch.
     pub unsafe fn new_sse2(seed: [u64; STATE_LANES]) -> Self {
-        Self::from_state(ShiShuAState::new_sse2(seed))
+        Self::from_state(unsafe { ShiShuAState::new_sse2(seed) })
     }
 
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
@@ -52,7 +52,7 @@ impl ShiShuARng {
     /// The caller must ensure that the current CPU supports SSSE3 before using
     /// the returned RNG. Prefer [`ShiShuARng::new`] for runtime dispatch.
     pub unsafe fn new_ssse3(seed: [u64; STATE_LANES]) -> Self {
-        Self::from_state(ShiShuAState::new_ssse3(seed))
+        Self::from_state(unsafe { ShiShuAState::new_ssse3(seed) })
     }
 
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
@@ -64,7 +64,7 @@ impl ShiShuARng {
     /// operating system has enabled AVX register state before using the
     /// returned RNG. Prefer [`ShiShuARng::new`] for runtime dispatch.
     pub unsafe fn new_avx2(seed: [u64; STATE_LANES]) -> Self {
-        Self::from_state(ShiShuAState::new_avx2(seed))
+        Self::from_state(unsafe { ShiShuAState::new_avx2(seed) })
     }
 
     #[cfg(target_arch = "aarch64")]

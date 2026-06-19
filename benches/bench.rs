@@ -7,7 +7,7 @@ use shishua::ShiShuARng;
 use shishua::ShiShuAState;
 
 #[cfg(feature = "__intern_c_bindings")]
-extern "C" {
+unsafe extern "C" {
     fn shishua_bindings_init(seed: *const u64) -> *mut ();
     fn shishua_bindings_destroy(state: *mut ());
     fn shishua_bindings_generate(state: *mut (), buffer: *mut u8, size: usize);

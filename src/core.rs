@@ -93,7 +93,7 @@ impl ShiShuAState {
     /// the returned state. Prefer [`ShiShuAState::new`] for runtime dispatch.
     pub unsafe fn new_sse2(seed: [u64; STATE_LANES]) -> Self {
         Self {
-            inner: StateImpl::Sse2(sse2_backend::State::new(seed)),
+            inner: StateImpl::Sse2(unsafe { sse2_backend::State::new(seed) }),
         }
     }
 
@@ -106,7 +106,7 @@ impl ShiShuAState {
     /// the returned state. Prefer [`ShiShuAState::new`] for runtime dispatch.
     pub unsafe fn new_ssse3(seed: [u64; STATE_LANES]) -> Self {
         Self {
-            inner: StateImpl::Ssse3(ssse3_backend::State::new(seed)),
+            inner: StateImpl::Ssse3(unsafe { ssse3_backend::State::new(seed) }),
         }
     }
 
@@ -120,7 +120,7 @@ impl ShiShuAState {
     /// returned state. Prefer [`ShiShuAState::new`] for runtime dispatch.
     pub unsafe fn new_avx2(seed: [u64; STATE_LANES]) -> Self {
         Self {
-            inner: StateImpl::Avx2(avx2_backend::State::new(seed)),
+            inner: StateImpl::Avx2(unsafe { avx2_backend::State::new(seed) }),
         }
     }
 
