@@ -2,12 +2,12 @@ use criterion::{
     criterion_group, criterion_main, BenchmarkId, Criterion, Throughput,
 };
 use rand_core::RngCore;
-use shishua::ShiShuARng;
+use shishua2::ShiShuARng;
 #[cfg(all(any(target_arch = "x86", target_arch = "x86_64"), not(miri)))]
-use shishua::ShiShuAState;
+use shishua2::ShiShuAState;
 
 #[cfg(feature = "__intern_c_bindings")]
-extern "C" {
+unsafe extern "C" {
     fn shishua_bindings_init(seed: *const u64) -> *mut ();
     fn shishua_bindings_destroy(state: *mut ());
     fn shishua_bindings_generate(state: *mut (), buffer: *mut u8, size: usize);
