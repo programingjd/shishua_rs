@@ -2,8 +2,7 @@ use crate::{
     core::{STATE_LANES, STATE_SIZE},
     ShiShuAState,
 };
-use rand::{SeedableRng, TryRng};
-use core::convert::Infallible;
+use rand9::{RngCore, SeedableRng};
 
 const STATE_WRAPPER_BUFFER_SIZE: usize =
     STATE_LANES * STATE_SIZE * size_of::<u64>();
@@ -98,29 +97,20 @@ impl ShiShuARng {
     }
 }
 
-impl TryRng for ShiShuARng {
-    type Error = Infallible;
-
-    fn try_next_u32(&mut self) -> Result<u32, Self::Error> {
+impl RngCore for ShiShuARng {
+    fn next_u32(&mut self) -> u32 {
         let mut buffer = [0u8; size_of::<u32>()];
         self.fill_bytes(&mut buffer);
-        Ok(u32::from_le_bytes(buffer))
+        u32::from_le_bytes(buffer)
     }
 
-    fn try_next_u64(&mut self) -> Result<u64, Self::Error> {
+    fn next_u64(&mut self) -> u64 {
         let mut buffer = [0u8; size_of::<u64>()];
         self.fill_bytes(&mut buffer);
-        Ok(u64::from_le_bytes(buffer))
+        u64::from_le_bytes(buffer)
     }
 
-    fn try_fill_bytes(&mut self, dest: &mut [u8]) -> Result<(), Self::Error> {
-        self.fill_bytes(dest);
-        Ok(())
-    }
-}
-
-impl ShiShuARng {
-    pub fn fill_bytes(&mut self, mut dest: &mut [u8]) {
+    fn fill_bytes(&mut self, mut dest: &mut [u8]) {
         let buffered =
             (STATE_WRAPPER_BUFFER_SIZE - self.buffer_index).min(dest.len());
         if buffered > 0 {
