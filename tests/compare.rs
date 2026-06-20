@@ -1,7 +1,5 @@
-#![cfg(feature = "rand")]
 
-use rand_core::RngCore;
-use shishua::{ShiShuARng, ShiShuAState};
+use shishua::{ShiShuAState};
 
 #[cfg(feature = "__intern_c_bindings")]
 fn to_seed(base_seed: u64) -> [u64; 4] {
@@ -48,8 +46,13 @@ fn generate_rust(seed: [u64; 4], length: usize) -> Vec<u8> {
 fn generate_rust_state(state: ShiShuAState, length: usize) -> Vec<u8> {
     let mut buffer = vec![0u8; length];
 
-    ShiShuARng::from_state(state).fill_bytes(&mut buffer);
-
+    #[cfg(any(feature = "rand", feature = "rand9"))]
+    shishua::ShiShuARng::from_state(state).fill_bytes(&mut buffer);
+    #[cfg(not(any(feature = "rand", feature = "rand9")))]
+    {
+        let mut state = state;
+        state.generate_bytes(&mut buffer);
+    }
     buffer
 }
 

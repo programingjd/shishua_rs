@@ -16,17 +16,17 @@ name = "bench"
 harness = false
 required-features = ["rand"]
 
-
 [features]
-rand = ["rand_core"]
-
+rand9 = ["dep:rand9"]
+rand = ["dep:rand"]
 default = ["rand"]
 
 # Compile bindings to the C implementation for benchmarks and tests
 __intern_c_bindings = ["cc"]
 
 [dependencies]
-rand_core = { version = "0.9", optional = true, default-features = false }
+rand9 = { package = "rand_core", version = "0.9", optional = true, default-features = false }
+rand = { version = "0.10", optional = true, default-features = false }
 
 [build-dependencies]
 cc = { version = "1.2", optional = true }

@@ -54,7 +54,7 @@ impl State {
         bytes_to_u64s(&bytes)
     }
 
-    #[cfg(feature = "rand")]
+    #[cfg(any(feature = "rand", feature = "rand9", test))]
     #[target_feature(enable = "sse2,ssse3")]
     pub fn generate_bytes(&mut self, output_slice: &mut [u8]) {
         self.generate_bytes_inner(output_slice);

@@ -186,8 +186,8 @@ impl ShiShuAState {
         }
     }
 
-    #[cfg(feature = "rand")]
-    pub(crate) fn generate_bytes(&mut self, output_slice: &mut [u8]) {
+    #[cfg(any(feature = "rand", feature = "rand9", test))]
+    pub fn generate_bytes(&mut self, output_slice: &mut [u8]) {
         match &mut self.inner {
             StateImpl::Scalar(state) => state.generate_bytes(output_slice),
             #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
