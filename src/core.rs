@@ -134,7 +134,7 @@ impl ShiShuAState {
     /// backend selection.
     pub unsafe fn new_neon(seed: [u64; STATE_LANES]) -> Self {
         Self {
-            inner: StateImpl::Neon(neon_backend::State::new(seed)),
+            inner: StateImpl::Neon(unsafe { neon_backend::State::new(seed) }),
         }
     }
 

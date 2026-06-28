@@ -39,7 +39,7 @@ impl ShiShuARng {
     ///
     /// # Safety
     ///
-    /// The caller must ensure that the current CPU supports SSE2 before using
+    /// The caller must ensure that the target CPU supports SSE2 before using
     /// the returned RNG. Prefer [`ShiShuARng::new`] for runtime dispatch.
     pub unsafe fn new_sse2(seed: [u64; STATE_LANES]) -> Self {
         Self::from_state(unsafe { ShiShuAState::new_sse2(seed) })
@@ -50,7 +50,7 @@ impl ShiShuARng {
     ///
     /// # Safety
     ///
-    /// The caller must ensure that the current CPU supports SSSE3 before using
+    /// The caller must ensure that the target CPU supports SSSE3 before using
     /// the returned RNG. Prefer [`ShiShuARng::new`] for runtime dispatch.
     pub unsafe fn new_ssse3(seed: [u64; STATE_LANES]) -> Self {
         Self::from_state(unsafe { ShiShuAState::new_ssse3(seed) })
@@ -61,7 +61,7 @@ impl ShiShuARng {
     ///
     /// # Safety
     ///
-    /// The caller must ensure that the current CPU supports AVX2 and that the
+    /// The caller must ensure that the target CPU supports AVX2 and that the
     /// operating system has enabled AVX register state before using the
     /// returned RNG. Prefer [`ShiShuARng::new`] for runtime dispatch.
     pub unsafe fn new_avx2(seed: [u64; STATE_LANES]) -> Self {
@@ -77,7 +77,7 @@ impl ShiShuARng {
     /// can execute AArch64 NEON instructions. Prefer [`ShiShuARng::new`] for
     /// backend selection.
     pub unsafe fn new_neon(seed: [u64; STATE_LANES]) -> Self {
-        Self::from_state(ShiShuAState::new_neon(seed))
+        Self::from_state(unsafe { ShiShuAState::new_neon(seed) })
     }
 
     pub fn backend_name(&self) -> &'static str {
