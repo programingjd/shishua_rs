@@ -89,7 +89,7 @@ impl ShiShuAState {
     ///
     /// # Safety
     ///
-    /// The caller must ensure that the current CPU supports SSE2 before using
+    /// The caller must ensure that the target CPU supports SSE2 before using
     /// the returned state. Prefer [`ShiShuAState::new`] for runtime dispatch.
     pub unsafe fn new_sse2(seed: [u64; STATE_LANES]) -> Self {
         Self {
@@ -102,7 +102,7 @@ impl ShiShuAState {
     ///
     /// # Safety
     ///
-    /// The caller must ensure that the current CPU supports SSSE3 before using
+    /// The caller must ensure that the target CPU supports SSSE3 before using
     /// the returned state. Prefer [`ShiShuAState::new`] for runtime dispatch.
     pub unsafe fn new_ssse3(seed: [u64; STATE_LANES]) -> Self {
         Self {
@@ -115,7 +115,7 @@ impl ShiShuAState {
     ///
     /// # Safety
     ///
-    /// The caller must ensure that the current CPU supports AVX2 and that the
+    /// The caller must ensure that the target CPU supports AVX2 and that the
     /// operating system has enabled AVX register state before using the
     /// returned state. Prefer [`ShiShuAState::new`] for runtime dispatch.
     pub unsafe fn new_avx2(seed: [u64; STATE_LANES]) -> Self {
@@ -134,7 +134,7 @@ impl ShiShuAState {
     /// backend selection.
     pub unsafe fn new_neon(seed: [u64; STATE_LANES]) -> Self {
         Self {
-            inner: StateImpl::Neon(neon_backend::State::new(seed)),
+            inner: StateImpl::Neon(unsafe { neon_backend::State::new(seed) }),
         }
     }
 
